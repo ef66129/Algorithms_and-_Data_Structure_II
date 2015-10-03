@@ -24,8 +24,8 @@ int main(void)
 	var /= 9.0;
 
 
-	printf("•½‹Ï: %f\n", avg);
-	printf("•ªU: %f\n", var);
+	printf("å¹³å‡: %fÂ¥n", avg);
+	printf("åˆ†æ•£: %fÂ¥n", var);
 
 	return 0;
 }
