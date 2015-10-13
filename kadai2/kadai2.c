@@ -49,11 +49,11 @@ void sort(int *first, int *last)
   
 
 /**
- * 概要:    線形探索を行う関数
- * value:  検索する値
- * first:  検索対象の配列のうち、もっとも先頭のアドレス
- * last:   検索対象の配列のうち、もっとも後ろのアドレス
- * count:  回数をカウントする変数へのポインタ
+ * 概要:  二分探索を行う関数
+ * value: 検索する値
+ * first: 検索対象の配列のうち、もっとも先頭のアドレス
+ * last:  検索対象の配列のうち、もっとも後ろのアドレス
+ * count: 回数をカウントする変数へのポインタ
  * 戻り値: 配列の中で値があるアドレス、見つからなかったらNULL
  */
 int *find(int value, const int *first, const int *last, int *count)
