@@ -60,7 +60,7 @@ int *find(int value, const int *first, const int *last, int *count)
 {
   const int *mid = first + ((last - first) / 2);
 
-  (*count)++;
+  if (count) (*count)++;
   
   if (first <= last) {
     if (*mid == value) {
