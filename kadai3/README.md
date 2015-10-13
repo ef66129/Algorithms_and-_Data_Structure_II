@@ -1,57 +1,61 @@
-# kadai2
-二分探索
+# kadai3
+ハッシュ
 
-## ソート
-ソートはクイックソートで行った。
-中身はポインタを使うこと以外は教科書のものと大体同じ。
+## 前準備
+まず、ハッシュの大きさを決める。  
+とりあえず、データの個数の２倍とした。
+`#define HASH_NUM (D_NUM * 2)`
+
+また、ハッシュの中身をファイルに出力するので、ファイル名も定義しておいた。
+`#define OUTPUT_FILENAME "hash.txt"`
+
+## ハッシュ関数
+ハッシュ関数はハッシュの個数で割った余りとした。
 ```
-void sort(int *first, int *last)
+int hash_func(int value)
 {
-  int *f = first;
-  int *l = last;
-  int p = *(first + (last - first) / 2);
-  
-  if (first > last) return;
-  for (;;) {
-    while(*f < p) f++;
-    while(p < *l) l--;
-    if (f >= l) break;
-    swap(f++,l--);
-  }
-  sort(first,f- 1);
-  sort(l + 1,last);
+  return value % HASH_NUM;
 }
 ```
 
-## 二分探索
-これも教科書と一緒。
-違うのは再帰を使っているところ、ポインタを使っているところ、探索範囲が1個になった時の挙動くらい。
-戻り値は配列の要素に対するポインタで、見つからなければNULLになるので、NULLかどうかを調べれば見つかったかが分かる。
+## ハッシュ
+ハッシュはポインタの配列とした。
+`int *Hash[HASH_NUM] = {0};`
+ハッシュにはアドレスを入れていき、何もなければ`NULL`になる。
 
-回数のカウントはポインタを渡して値を増やしていくことでカウントしていく。
+## 格納
+ハッシュ関数の結果を基ににして入れていく。
+既に入っている場合は１つずつずらしていく。
 
 ```
-int *find(int value, const int *first, const int *last, int *count)
-{
-  const int *mid = first + ((last - first) / 2);
-
-  if (count) (*count)++;
-  
-  if (first <= last) {
-    if (*mid == value) {
-      return (int *)mid;
-    } else if (*mid > value) {
-      return find(value, first, mid - 1, count);
-    } else {
-      return find(value, mid + 1, last, count);
+  for (int i = 0; i < D_NUM; i++) {
+    int k;
+    for (k = hash_func(D[i]); Hash[k]; k++) {
+      k = k % HASH_NUM;
     }
-  } else {
-    return NULL;
+    Hash[k] = &D[i];
   }
-}
 ```
 
 ## 結果の出力
-データ番号は配列の先頭ポインタと`find()`の引き算で分かる。
-型は`ptrdiff_t`となるので`%td`で出力する。  
-MSVC++は`%td`が使えないので`%Id`になる。
+ファイルに出力する。
+`fopen_s`関数はC99ではMSVC++の独自拡張なので`#ifdef`を使っている。
+```
+#ifdef _MSC_VER
+  if (fopen_s(&fp, OUTPUT_FILENAME, "w") == 0) {
+#else
+  if ((fp = fopen(OUTPUT_FILENAME, "w"))) {
+#endif
+    for (int i = 0; i < HASH_NUM; i++) {
+      if (Hash[i]) {
+	fprintf(fp, "%d¥n", *Hash[i]);
+      } else {
+	fprintf(fp, "NULL¥n");
+      }
+    }
+    printf("結果を" OUTPUT_FILENAME "に書き込みました。¥n");
+  } else {
+    printf("ファイルに結果を書き込めませんでした。¥n");
+    return -1;
+  }
+```
