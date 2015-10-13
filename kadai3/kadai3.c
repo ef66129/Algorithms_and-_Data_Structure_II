@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2015 EF66_129
+Released under the MIT license
+http://opensource.org/licenses/mit-license.php
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
